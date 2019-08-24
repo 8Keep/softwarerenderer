@@ -17,13 +17,13 @@ public class Display extends Canvas {
 
     public Display(int width, int height) {
 
-        height/=2;
-        width/=2;
+        height /= 2;
+        width /= 2;
         frameBuffer = new RenderContext(width, height);
         displayImage = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-        displayBuffer = ((DataBufferByte)displayImage.getRaster().getDataBuffer()).getData();
+        displayBuffer = ((DataBufferByte) displayImage.getRaster().getDataBuffer()).getData();
 
-        Dimension size = new Dimension(width*2, height*2);
+        Dimension size = new Dimension(width * 2, height * 2);
         setPreferredSize(size);
         frame = new JFrame();
         frame.add(this);
@@ -58,7 +58,7 @@ public class Display extends Canvas {
 
     public void swapBuffers() {
         frameBuffer.toByteArray(displayBuffer);
-        graphics.drawImage(displayImage, 0, 0, frameBuffer.width*2, frameBuffer.height*2, null);
+        graphics.drawImage(displayImage, 0, 0, frameBuffer.width * 2, frameBuffer.height * 2, null);
         bufferStrategy.show();
     }
 }

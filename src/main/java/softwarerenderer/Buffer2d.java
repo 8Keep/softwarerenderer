@@ -32,7 +32,7 @@ public class Buffer2d {
     }
 
     public int componentsToInt(int a, int r, int g, int b) {
-        return ((r&0xFF)<<16) | ((g&0xFF)<<8) | (b&0xFF);
+        return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
     }
 
     public void drawPixel(int x, int y, int a, int r, int g, int b) {
@@ -42,13 +42,11 @@ public class Buffer2d {
         pixels[(y * width) + x] = componentsToInt(a, r, g, b);
     }
 
-    public void toByteArray(byte[] dest)
-    {
-        for(int i = 0; i < width * height; i++)
-        {
-            dest[i * 3    ] = (byte)(pixels[i] & B_MASK);
-            dest[i * 3 + 1] = (byte)((pixels[i] & G_MASK) >> 8);
-            dest[i * 3 + 2] = (byte)((pixels[i] & R_MASK) >> 16);
+    public void toByteArray(byte[] dest) {
+        for (int i = 0; i < width * height; i++) {
+            dest[i * 3] = (byte) (pixels[i] & B_MASK);
+            dest[i * 3 + 1] = (byte) ((pixels[i] & G_MASK) >> 8);
+            dest[i * 3 + 2] = (byte) ((pixels[i] & R_MASK) >> 16);
         }
     }
 

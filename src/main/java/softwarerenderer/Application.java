@@ -31,18 +31,16 @@ public class Application {
 
         display.updateFPS(fps);
 
-        while (running)
-        {
+        while (running) {
             now = System.nanoTime();
             updateLength = now - lastLoopTime;
             lastLoopTime = now;
-            delta = updateLength / ((double)optimalTime);
+            delta = updateLength / ((double) optimalTime);
 
             lastFpsTime += updateLength;
             fps++;
 
-            if (lastFpsTime >= 1000000000)
-            {
+            if (lastFpsTime >= 1000000000) {
                 display.updateFPS(fps);
                 lastFpsTime = 0;
                 fps = 0;
@@ -53,9 +51,9 @@ public class Application {
             display.swapBuffers();
 
             try {
-                Thread.sleep( (lastLoopTime-System.nanoTime() + optimalTime)/1000000 );
+                Thread.sleep((lastLoopTime - System.nanoTime() + optimalTime) / 1000000);
+            } catch (Exception e) {
             }
-            catch(Exception e) {}
         }
     }
 

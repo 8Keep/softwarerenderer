@@ -40,8 +40,8 @@ public class RenderContext extends Buffer2d {
     }
 
     public void scanTriangle(Vertex minYVert, Vertex midYVert, Vertex maxYVert, boolean handedness) {
-        Edge topToBottom    = new Edge(minYVert, maxYVert);
-        Edge topToMiddle    = new Edge(minYVert, midYVert);
+        Edge topToBottom = new Edge(minYVert, maxYVert);
+        Edge topToMiddle = new Edge(minYVert, midYVert);
         Edge middleToBottom = new Edge(midYVert, maxYVert);
 
         scanEdges(topToBottom, topToMiddle, handedness);

@@ -1,14 +1,17 @@
 package softwarerenderer;
 
-public class Vertex
-{
+public class Vertex {
     Vector4f pos;
 
-    public float getX() { return pos.getX(); }
-    public float getY() { return pos.getY(); }
+    public float getX() {
+        return pos.getX();
+    }
 
-    public Vertex(float x, float y, float z)
-    {
+    public float getY() {
+        return pos.getY();
+    }
+
+    public Vertex(float x, float y, float z) {
         pos = new Vector4f(x, y, z, 1);
     }
 
@@ -22,9 +25,9 @@ public class Vertex
 
     public Vertex perspectiveDivide() {
         return new Vertex(new Vector4f(pos.getX() / pos.getW(),
-                          pos.getY() / pos.getW(),
-                          pos.getZ() / pos.getW(),
-                          pos.getW()));
+                pos.getY() / pos.getW(),
+                pos.getZ() / pos.getW(),
+                pos.getW()));
 
     }
 
@@ -35,6 +38,6 @@ public class Vertex
         float x2 = c.getX() - pos.getX();
         float y2 = c.getY() - pos.getY();
 
-        return (x1*y2) - (x2*y2);
+        return (x1 * y2) - (x2 * y2);
     }
 }

@@ -20,12 +20,12 @@ public class TestApplication extends Application {
 
         minYVert = new Vertex(-1, -1, 0);
         midYVert = new Vertex(0, 1, 0);
-        maxYVert = new Vertex(1 , -1, 0);
+        maxYVert = new Vertex(1, -1, 0);
         projection = new Matrix4f().initPerspective(
-                                            (float)Math.toRadians(70.0f),
-                                  (float)frameBuffer.getWidth() / (float)frameBuffer.getHeight(),
-                                      0.1f,
-                                       1000.0f);
+                (float) Math.toRadians(70.0f),
+                (float) frameBuffer.getWidth() / (float) frameBuffer.getHeight(),
+                0.1f,
+                1000.0f);
 
         rotCounter = 0.0f;
     }
