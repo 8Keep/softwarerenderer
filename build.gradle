@@ -1,0 +1,21 @@
+    
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+}
+
+mainClassName = 'softwarerenderer.Main'
+
+
+jar {
+    manifest {
+        attributes "Main-Class": "softwarerenderer.Main"
+    }
+}
