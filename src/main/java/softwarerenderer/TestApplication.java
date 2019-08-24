@@ -10,10 +10,13 @@ public class TestApplication extends Application {
     Vertex maxYVert;
 
     public TestApplication() {
+
     }
 
     @Override
     public void init() {
+
+        display.setTitle("Software Renderer V0.1");
 
         minYVert = new Vertex(-1, -1, 0);
         midYVert = new Vertex(0, 1, 0);

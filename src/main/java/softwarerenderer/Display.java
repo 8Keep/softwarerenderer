@@ -15,7 +15,7 @@ public class Display extends Canvas {
     String title;
     int fps;
 
-    public Display(int width, int height, String title) {
+    public Display(int width, int height) {
 
         height/=2;
         width/=2;
@@ -30,8 +30,7 @@ public class Display extends Canvas {
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setTitle(title);
-        this.title = title;
+        frame.setTitle("");
 
         createBufferStrategy(1);
         bufferStrategy = getBufferStrategy();
@@ -44,12 +43,17 @@ public class Display extends Canvas {
     }
 
     public void setTitle(String title) {
-        frame.setTitle(title);
+        this.title = title;
+        updateTitle();
+    }
+
+    void updateTitle() {
+        frame.setTitle(title + " FPS: " + fps);
     }
 
     public void updateFPS(int fps) {
         this.fps = fps;
-        setTitle (title + " FPS: " + fps);
+        updateTitle();
     }
 
     public void swapBuffers() {

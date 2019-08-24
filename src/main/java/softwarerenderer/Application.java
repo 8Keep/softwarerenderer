@@ -15,7 +15,7 @@ public class Application {
     public void start() {
         running = true;
 
-        display = new Display(1200, 1000, "Software Renderer 0.1");
+        display = new Display(1200, 1000);
         frameBuffer = display.getFrameBuffer();
 
         init();
@@ -29,10 +29,10 @@ public class Application {
         long updateLength;
         double delta;
 
+        display.updateFPS(fps);
+
         while (running)
         {
-            //frameBuffer.clear(0x0, 0x0, 0x0, 0x0);
-
             now = System.nanoTime();
             updateLength = now - lastLoopTime;
             lastLoopTime = now;
