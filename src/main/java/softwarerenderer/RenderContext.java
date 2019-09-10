@@ -46,11 +46,11 @@ public class RenderContext extends Buffer2d {
         Edge topToMiddle = new Edge(triangleData, minYVert, midYVert, 0);
         Edge middleToBottom = new Edge(triangleData, midYVert, maxYVert, 1);
 
-        scanEdges(triangleData, topToBottom, topToMiddle, handedness, texture);
-        scanEdges(triangleData, topToBottom, middleToBottom, handedness, texture);
+        scanEdges(topToBottom, topToMiddle, handedness, texture);
+        scanEdges(topToBottom, middleToBottom, handedness, texture);
     }
 
-    private void scanEdges(TriangleData triangleData, Edge a, Edge b, boolean handedness, Buffer2d texture) {
+    private void scanEdges(Edge a, Edge b, boolean handedness, Buffer2d texture) {
 
         Edge left = a;
         Edge right = b;
@@ -63,30 +63,37 @@ public class RenderContext extends Buffer2d {
         int yStart = b.getYStart();
         int yEnd = b.getYEnd();
         for (int j = yStart; j < yEnd; j++) {
-            drawScanLine(triangleData, left, right, j, texture);
+            drawScanLine(left, right, j, texture);
             left.step();
             right.step();
         }
     }
 
-    private void drawScanLine(TriangleData triangleData, Edge left, Edge right, int j, Buffer2d texture) {
+    private void drawScanLine(Edge left, Edge right, int j, Buffer2d texture) {
         int xMin = (int) Math.ceil(left.getX());
         int xMax = (int) Math.ceil(right.getX());
 
         float xPrestep = xMin - left.getX();
 
-        float texCoordX = left.getTexCoordX() + triangleData.getTexCoordXXStep() * xPrestep;
-        float texCoordY = left.getTexCoordY() + triangleData.getTexCoordYXStep() * xPrestep;
+        float xDist = right.getX() - left.getX();
+        float texCoordXXStep = (right.getTexCoordX() - left.getTexCoordX())/xDist;
+        float texCoordYXStep = (right.getTexCoordY() - left.getTexCoordY())/xDist;
+        float oneOverZXStep = (right.getOneOverZ() - left.getOneOverZ())/xDist;
+
+        float texCoordX = left.getTexCoordX() + texCoordXXStep * xPrestep;
+        float texCoordY = left.getTexCoordY() + texCoordYXStep * xPrestep;
+        float oneOverZ = left.getOneOverZ() + oneOverZXStep * xPrestep;
 
         for (int i = xMin; i < xMax; i++) {
 
-            int srcX = (int)(texCoordX * (texture.getWidth() - 1) + 0.5f);
-            int srcY = (int)(texCoordY * (texture.getHeight() - 1) + 0.5f);
+            float z = 1.0f/oneOverZ;
+            int srcX = (int)((texCoordX * z) * (float)(texture.getWidth() - 1) + 0.5f);
+            int srcY = (int)((texCoordY * z) * (float)(texture.getHeight() - 1) + 0.5f);
 
             copyPixel(texture, srcX, srcY, i, j);
-            texCoordX += triangleData.getTexCoordXXStep();
-            texCoordY += triangleData.getTexCoordYXStep();
-
+            oneOverZ += oneOverZXStep;
+            texCoordX += texCoordXXStep;
+            texCoordY += texCoordYXStep;
         }
     }
 }

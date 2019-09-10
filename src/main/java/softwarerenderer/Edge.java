@@ -10,6 +10,8 @@ public class Edge {
     private float texCoordXStep;
     private float texCoordY;
     private float texCoordYStep;
+    private float oneOverZ;
+    private float oneOverZStep;
 
     public float getX() {
         return x;
@@ -30,6 +32,8 @@ public class Edge {
     public float getTexCoordY() {
         return texCoordY;
     }
+
+    public float getOneOverZ() { return oneOverZ; }
 
     public Edge(TriangleData triangleData, Vertex minYVert, Vertex maxYVert, int minYVertIndex) {
         yStart = (int) Math.ceil(minYVert.getY());
@@ -53,6 +57,11 @@ public class Edge {
                 triangleData.getTexCoordYXStep() * xPrestep +
                 triangleData.getTexCoordYYStep() * yPrestep;
         texCoordYStep = triangleData.getTexCoordYYStep() + triangleData.getTexCoordYXStep() * xStep;
+
+        oneOverZ = triangleData.getOneOverZ(minYVertIndex) +
+                triangleData.getOneOverZXStep() * xPrestep +
+                triangleData.getOneOverZYStep() * yPrestep;
+        oneOverZStep = triangleData.getOneOverZYStep() + triangleData.getOneOverZXStep() * xStep;
     }
 
     public void step() {
@@ -60,5 +69,6 @@ public class Edge {
 
         texCoordX += texCoordXStep;
         texCoordY += texCoordYStep;
+        oneOverZ += oneOverZStep;
     }
 }

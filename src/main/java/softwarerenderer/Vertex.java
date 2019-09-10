@@ -15,6 +15,10 @@ public class Vertex {
         return pos.y;
     }
 
+    public Vector4f getPosition() {
+        return pos;
+    }
+
     public Vector4f getColor() {
         return color;
     }
