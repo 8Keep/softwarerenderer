@@ -6,7 +6,7 @@ public class RenderContext extends Buffer2d {
         super(width, height);
     }
 
-    public void fillTriangle(Vertex v1, Vertex v2, Vertex v3) {
+    public void fillTriangle(Vertex v1, Vertex v2, Vertex v3, Buffer2d texture) {
 
         Matrix4f screenspaceTransform =
                 new Matrix4f().initScreenSpaceTransform(getWidth() / 2, getHeight() / 2);
@@ -36,19 +36,21 @@ public class RenderContext extends Buffer2d {
 
 
         scanTriangle(minYVert, midYVert, maxYVert,
-                minYVert.triangleAreaTimesTwo(maxYVert, midYVert) >= 0);
+                minYVert.triangleAreaTimesTwo(maxYVert, midYVert) >= 0,
+                texture);
     }
 
-    public void scanTriangle(Vertex minYVert, Vertex midYVert, Vertex maxYVert, boolean handedness) {
-        Edge topToBottom = new Edge(minYVert, maxYVert);
-        Edge topToMiddle = new Edge(minYVert, midYVert);
-        Edge middleToBottom = new Edge(midYVert, maxYVert);
+    public void scanTriangle(Vertex minYVert, Vertex midYVert, Vertex maxYVert, boolean handedness, Buffer2d texture) {
+        TriangleData triangleData = new TriangleData(minYVert, midYVert, maxYVert);
+        Edge topToBottom = new Edge(triangleData, minYVert, maxYVert, 0);
+        Edge topToMiddle = new Edge(triangleData, minYVert, midYVert, 0);
+        Edge middleToBottom = new Edge(triangleData, midYVert, maxYVert, 1);
 
-        scanEdges(topToBottom, topToMiddle, handedness);
-        scanEdges(topToBottom, middleToBottom, handedness);
+        scanEdges(triangleData, topToBottom, topToMiddle, handedness, texture);
+        scanEdges(triangleData, topToBottom, middleToBottom, handedness, texture);
     }
 
-    private void scanEdges(Edge a, Edge b, boolean handedness) {
+    private void scanEdges(TriangleData triangleData, Edge a, Edge b, boolean handedness, Buffer2d texture) {
 
         Edge left = a;
         Edge right = b;
@@ -61,18 +63,29 @@ public class RenderContext extends Buffer2d {
         int yStart = b.getYStart();
         int yEnd = b.getYEnd();
         for (int j = yStart; j < yEnd; j++) {
-            drawScanLine(left, right, j);
+            drawScanLine(triangleData, left, right, j, texture);
             left.step();
             right.step();
         }
     }
 
-    private void drawScanLine(Edge left, Edge right, int j) {
+    private void drawScanLine(TriangleData triangleData, Edge left, Edge right, int j, Buffer2d texture) {
         int xMin = (int) Math.ceil(left.getX());
         int xMax = (int) Math.ceil(right.getX());
 
+        float xPrestep = xMin - left.getX();
+
+        float texCoordX = left.getTexCoordX() + triangleData.getTexCoordXXStep() * xPrestep;
+        float texCoordY = left.getTexCoordY() + triangleData.getTexCoordYXStep() * xPrestep;
+
         for (int i = xMin; i < xMax; i++) {
-            drawPixel(i, j, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF);
+
+            int srcX = (int)(texCoordX * (texture.getWidth() - 1) + 0.5f);
+            int srcY = (int)(texCoordY * (texture.getHeight() - 1) + 0.5f);
+
+            copyPixel(texture, srcX, srcY, i, j);
+            texCoordX += triangleData.getTexCoordXXStep();
+            texCoordY += triangleData.getTexCoordYXStep();
 
         }
     }

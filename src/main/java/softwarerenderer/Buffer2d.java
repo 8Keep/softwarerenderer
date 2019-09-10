@@ -19,6 +19,14 @@ public class Buffer2d {
         pixels = new int[width * height];
     }
 
+    public int getPixel(int x, int y) {
+        return pixels[(y * getWidth()) + x];
+    }
+
+    public void setPixel(int x, int y, int pixel) {
+        pixels[(y * getWidth()) + x] = pixel;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -35,19 +43,23 @@ public class Buffer2d {
         return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
     }
 
+    public void copyPixel(Buffer2d src, int srcX, int srcY, int destX, int destY)
+    {
+        setPixel(destX, destY, src.getPixel(srcX, srcY));
+    }
+
     public void drawPixel(int x, int y, int a, int r, int g, int b) {
-        int index = (y * width) + x;
+        int index = (y * getWidth()) + x;
         if (index < 0 || index >= pixels.length)
             return;
-        pixels[(y * width) + x] = componentsToInt(a, r, g, b);
+        pixels[(y * getWidth()) + x] = componentsToInt(a, r, g, b);
     }
 
     public void toByteArray(byte[] dest) {
-        for (int i = 0; i < width * height; i++) {
+        for (int i = 0; i < getWidth() * getHeight(); i++) {
             dest[i * 3] = (byte) (pixels[i] & B_MASK);
             dest[i * 3 + 1] = (byte) ((pixels[i] & G_MASK) >> 8);
             dest[i * 3 + 2] = (byte) ((pixels[i] & R_MASK) >> 16);
         }
     }
-
 }

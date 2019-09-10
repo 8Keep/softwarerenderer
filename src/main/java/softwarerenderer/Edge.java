@@ -6,6 +6,10 @@ public class Edge {
     private float xStep;
     private int yStart;
     private int yEnd;
+    private float texCoordX;
+    private float texCoordXStep;
+    private float texCoordY;
+    private float texCoordYStep;
 
     public float getX() {
         return x;
@@ -19,7 +23,15 @@ public class Edge {
         return yEnd;
     }
 
-    public Edge(Vertex minYVert, Vertex maxYVert) {
+    public float getTexCoordX() {
+        return texCoordX;
+    }
+
+    public float getTexCoordY() {
+        return texCoordY;
+    }
+
+    public Edge(TriangleData triangleData, Vertex minYVert, Vertex maxYVert, int minYVertIndex) {
         yStart = (int) Math.ceil(minYVert.getY());
         yEnd = (int) Math.ceil(maxYVert.getY());
 
@@ -29,9 +41,24 @@ public class Edge {
         float yPrestep = yStart - minYVert.getY();
         xStep = (float) xDist / (float) yDist;
         x = minYVert.getX() + yPrestep * xStep;
+
+        float xPrestep = x - minYVert.getX();
+
+        texCoordX = triangleData.getTexCoordX(minYVertIndex) +
+                triangleData.getTexCoordXXStep() * xPrestep +
+                triangleData.getTexCoordXYStep() * yPrestep;
+        texCoordXStep = triangleData.getTexCoordXYStep() + triangleData.getTexCoordXXStep() * xStep;
+
+        texCoordY = triangleData.getTexCoordY(minYVertIndex) +
+                triangleData.getTexCoordYXStep() * xPrestep +
+                triangleData.getTexCoordYYStep() * yPrestep;
+        texCoordYStep = triangleData.getTexCoordYYStep() + triangleData.getTexCoordYXStep() * xStep;
     }
 
     public void step() {
         x += xStep;
+
+        texCoordX += texCoordXStep;
+        texCoordY += texCoordYStep;
     }
 }

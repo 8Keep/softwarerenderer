@@ -1,16 +1,20 @@
 package softwarerenderer;
 
 public class Vector4f {
-    private float x;
-    private float y;
-    private float z;
-    private float w;
+    public float x;
+    public float y;
+    public float z;
+    public float w;
 
     public Vector4f(float x, float y, float z, float w) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.w = w;
+    }
+
+    public Vector4f() {
+        x = y = z = w = 0;
     }
 
     public float length() {
@@ -26,13 +30,13 @@ public class Vector4f {
     }
 
     public float dot(Vector4f r) {
-        return x * r.getX() + y * r.getY() + z * r.getZ() + w * r.getW();
+        return x * r.x + y * r.y + z * r.z + w * r.w;
     }
 
     public Vector4f cross(Vector4f r) {
-        float x_ = y * r.getZ() - z * r.getY();
-        float y_ = z * r.getX() - x * r.getZ();
-        float z_ = x * r.getY() - y * r.getX();
+        float x_ = y * r.z - z * r.y;
+        float y_ = z * r.x - x * r.z;
+        float z_ = x * r.y - y * r.x;
 
         return new Vector4f(x_, y_, z_, 0);
     }
@@ -57,7 +61,7 @@ public class Vector4f {
     }
 
     public Vector4f add(Vector4f r) {
-        return new Vector4f(x + r.getX(), y + r.getY(), z + r.getZ(), w + r.getW());
+        return new Vector4f(x + r.x, y + r.y, z + r.z, w + r.w);
     }
 
     public Vector4f add(float r) {
@@ -65,7 +69,7 @@ public class Vector4f {
     }
 
     public Vector4f subtract(Vector4f r) {
-        return new Vector4f(x - r.getX(), y - r.getY(), z - r.getZ(), w - r.getW());
+        return new Vector4f(x - r.x, y - r.y, z - r.z, w - r.w);
     }
 
     public Vector4f subtract(float r) {
@@ -73,7 +77,7 @@ public class Vector4f {
     }
 
     public Vector4f mult(Vector4f r) {
-        return new Vector4f(x * r.getX(), y * r.getY(), z * r.getZ(), w * r.getW());
+        return new Vector4f(x * r.x, y * r.y, z * r.z, w * r.w);
     }
 
     public Vector4f mult(float r) {
@@ -81,7 +85,7 @@ public class Vector4f {
     }
 
     public Vector4f divide(Vector4f r) {
-        return new Vector4f(x / r.getX(), y / r.getY(), z / r.getZ(), w / r.getW());
+        return new Vector4f(x / r.x, y / r.y, z / r.z, w / r.w);
     }
 
     public Vector4f divide(float r) {
@@ -96,23 +100,7 @@ public class Vector4f {
         return "(" + x + ", " + y + ", " + z + ", " + w + ")";
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getZ() {
-        return z;
-    }
-
-    public float getW() {
-        return w;
-    }
-
     public boolean equals(Vector4f r) {
-        return x == r.getX() && y == r.getY() && z == r.getZ() && w == r.getW();
+        return x == r.x && y == r.y && z == r.z && w == r.w;
     }
 }
